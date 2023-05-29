@@ -2,10 +2,10 @@ name: test script for pr and merge
 
 on:
   push:
-    branches: ["main", "draft"]
+    branches: ["main", "draft", "dev"]
   pull_request:
     types: [opened, reopened]
-    branches: ["main", "draft"]
+    branches: ["main", "draft", "dev"]
 
 jobs:
   test:
