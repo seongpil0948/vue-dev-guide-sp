@@ -130,8 +130,17 @@ As this template is strongly opinionated, the following provides a curated list 
 
 ## Usage
 
+### Setup
+```
+pnpm install
+npx playwright install  
+```
+#### if Ubuntu
+https://github.com/microsoft/playwright/issues/13738
+`pnpm exec playwright install --with-deps`
+or
+`npx playwright install --with-deps`
 ### Development
-
 Just run and visit http://localhost:3333
 
 ```bash
