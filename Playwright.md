@@ -33,7 +33,7 @@ TBD
 TDD 최대 난제 중 하나인 개발비용 단축에 대한 기능이자 우리가 이 라이브러리를 도입 하고자하는 핵심 기능입니다.  
 `npx playwright codegen demo.playwright.dev/todomvc`
 와 같이 URL을 입력하면 2개의 창이 오픈됩니다.  
-
+~~테스트 커버리지를 계산, 모든 파일에 대한 테스트 파일 생성을 기대했으나...~~
 ### 2.2 Inspector
 익숙한 Vue Inspector처럼 Playwright 또한 Inspector를 제공합니다.
 이기능은 2개의 window(한쪽은 개발앱 다른쪽은 inspector)를 열게되고
@@ -67,7 +67,9 @@ E2E 테스트 라이브러리는 대체로 무겁고, 느립니다 왜냐하면
 6. 개발계 브랜치로 PR/MR을 생성,테스트 과정을 녹화하고, 자동화 테스트를 통해 증명합니다.
 
 ### 3.3 시연 시나리오(Test generator) 
-TODO
+1. 사전 Test generator를 이용 테스트 코드 작성
+2. Test generator 실시간 생성된 코드와 기작성 코드 비교를 통해 개발 비용 추산
+3. 몇퍼센트정도 절감 예상?
 ### 3.4 시연 시나리오(테스트 과정) 
 1. local 환경 테스트 window 구동(e2e:ui) 확인
 2. 할일 인덱스 페이지 접근 (http://localhost:3333/guide/samp/el-todo) 확인
@@ -76,7 +78,7 @@ TODO
 5. 2행에 대한 checkbox 클릭 확인
 6. 삭제버튼 클릭 확인
 7. 빈 테이블 및 no data text 확인
-8.  현황,결과 아티팩트 확인 및 다운로드
+8. 현황,결과 아티팩트 확인 및 다운로드
 
 ## 4. Discuss
 - Git CI 과정에서 녹화본 아티팩트를 저장 할 수 있어야 하는지
