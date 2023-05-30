@@ -20,6 +20,9 @@ useHead({
     },
   ],
 })
+onErrorCaptured((hook, instance, message) => {
+  console.error('Vue Global Error: hook: ', hook, '\n instance: ', instance, 'message: ', message)
+})
 </script>
 
 <template>
