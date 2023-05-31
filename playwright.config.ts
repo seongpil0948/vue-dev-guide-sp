@@ -9,18 +9,18 @@ import { defineConfig, devices, expect } from '@playwright/test'
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const TEST_REPORT_PATH = './test/report'
-const TEST_E2E_PATH = './test/e2e'
+// const TEST_REPORT_PATH = './test-results'
 export default defineConfig({
-  testDir: TEST_E2E_PATH,
-  timeout: 5000,
-  expect: {
-    /**
+  testDir: './test/e2e',
+  // timeout: 5000,
+  // expect: {
+  /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: 5000,
-  },
+  // timeout: 5000,
+  // },
+  // outputDir: `${TEST_REPORT_PATH}/out`,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -30,11 +30,12 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['html', { outputFolder: TEST_REPORT_PATH, outputFile: 'report.html' }],
-    ['json', { outputFolder: TEST_REPORT_PATH, outputFile: `${TEST_REPORT_PATH}/report.json` }],
-    ['./test/reporter.ts'],
-  ],
+  reporter: 'html',
+  // reporter: [
+  // ['html'],
+  // ['json', { outputFolder: TEST_REPORT_PATH, outputFile: `${TEST_REPORT_PATH}/report.json` }],
+  // ['./test/reporter.ts'],
+  // ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */

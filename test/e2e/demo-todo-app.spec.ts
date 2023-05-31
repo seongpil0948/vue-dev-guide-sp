@@ -2,6 +2,7 @@ import { type Page, expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://demo.playwright.dev/todomvc')
+  expect(page).toHaveURL(/todomvc/)
 })
 
 const TODO_ITEMS = [
