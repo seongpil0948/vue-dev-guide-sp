@@ -15,5 +15,6 @@ components.d.ts
 mock/rest/*/*/*/mock/response.txt
 mock/rest/.validation.json
 /test-results/
+/test-out/
 /playwright-report/
 /playwright/.cache/

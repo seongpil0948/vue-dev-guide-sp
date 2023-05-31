@@ -4,7 +4,8 @@
   - [1. 왜 Playwright를 써야할까?](#1-왜-playwright를-써야할까)
     - [1.1 개발 팀의 제한 사항](#11-개발-팀의-제한-사항)
     - [1.2 기존 클라이언트의 요구사항](#12-기존-클라이언트의-요구사항)
-    - [1.3 도입시 기대되는 결과](#13-도입시-기대되는-결과)
+      - [1.2.1 클라이언트는 기술을 가진 회사를 신뢰합니다.](#121-클라이언트는-기술을-가진-회사를-신뢰합니다)
+      - [1.2.2 클라이언트는 산출물이 필요합니다.](#122-클라이언트는-산출물이-필요합니다)
   - [2. Playwright란?](#2-playwright란)
     - [2.1 Test generator](#21-test-generator)
     - [2.2 Inspector](#22-inspector)
@@ -17,11 +18,7 @@
     - [3.4 시연 시나리오(테스트 과정)](#34-시연-시나리오테스트-과정)
     - [3.5 한계](#35-한계)
       - [포괄적인 Selector](#포괄적인-selector)
-- [4. Agenda](#4-agenda)
-  - [4.1 Discuss](#41-discuss)
-  - [4.2 TODO](#42-todo)
-- [5. 테스트란?](#5-테스트란)
-- [6. Refer](#6-refer)
+- [4. Refer](#4-refer)
 
 
 ## 1. 왜 Playwright를 써야할까?
@@ -35,13 +32,30 @@ vite, vue 모두 SPC 를 위한 툴이며, vitest는 SPC, Client-Side Rendering 
 이에 마이크로 소프트의 __Playwright__ 는 아래 특징들을 무기로 위 문제들에 대한 대안을 제시합니다.
 ### 1.1 개발 팀의 제한 사항
 - 프레임워크 진입 장벽
-  - 새로운 문서 및 API들에 대한 숙련도가 요구됌
+  - 새로운 문서 및 API들에 대한 숙달이 필요합니다.
 ### 1.2 기존 클라이언트의 요구사항
-### 1.3 도입시 기대되는 결과
+#### 1.2.1 클라이언트는 기술을 가진 회사를 신뢰합니다.
+- 규모가 큰 회사 일수록 더욱 중요시 생각하는 __소프트웨어 테스트 자동화__ 기술은 소유한 업체에 대하여 각종 포트폴리오, 디자인등 문서에 더하여 큰 선정 고려요소이자, 신뢰를 제공 할 수 있는 대표적인 방법 중 하나입니다.
+- 
 
+#### 1.2.2 클라이언트는 산출물이 필요합니다.
+- 개발업체를 선정하는 부분에 있어, 업체 별 산출물의 정리과정중 __소프트웨어 테스트__ 관련 문서는 고려대상이 아닐 수 없습니다.
+클라이언트 입장에서, 테스트를 전적으로 우리회사에게 맡기는 경우는 거의 존재하지 않습니다.
+각 회사는 개발팀부터 QA팀, PM, PL까지 많은 인력 소모를 감수하여, 매 배포시 테스트를 진행합니다.
+우리는 __playwright__ 의 __reporter__ 의 기능은 다음과 같습니다. 
+- HTML
+  - 파일(페이지) - 테스트 그룹 - 테스트 케이스로 분류된 목록
+  - pass/fail/skip 필터링
+  - 검색
+- Screenshot
+  - 테스트 코드중 설정에 따라 programmatic 또는 자동 으로 테스트 장면을 저장 가능
+- JSON/Custom Reporter
+  - 엑셀 라이브러리를 이용하여, 커스텀한 엑셀을 생성 및 제공 할 수 있습니다.
+  - 그 외 고객의 요구사항에 맞게 커스터마이징한 Reporter 를 제공 할 수 있습니다.
 
 ## 2. Playwright란?
-TBD
+Playwright는 웹 애플리케이션 테스트 및 자동화를 위한 오픈 소스 도구입니다.   
+브라우저(Chrome, Firefox, Safari 등)를 제어하고 사용자의 행동(클릭, 키 입력, 네비게이션 등)을 시뮬레이션하는 기능을 제공합니다.
 ### 2.1 Test generator
 TDD 최대 난제 중 하나인 개발비용 단축에 대한 기능이자 우리가 이 라이브러리를 도입 하고자하는 핵심 기능입니다.  
 `npx playwright codegen demo.playwright.dev/todomvc`
@@ -84,8 +98,6 @@ E2E 테스트 라이브러리는 대체로 무겁고, 느립니다 왜냐하면
 ### 3.3 시연 시나리오(Test generator) 
 1. 서버 구동
 2. 
-3. Test generator 실시간 생성된 코드와 기작성 코드 비교를 통해 개발 비용 추산
-4. 몇퍼센트정도 절감 예상?
 ### 3.4 시연 시나리오(테스트 과정) 
 1. local 환경 테스트 window 구동(e2e:ui) 확인
 2. 할일 인덱스 페이지 접근 (http://localhost:3333/guide/samp/el-todo) 확인
@@ -94,43 +106,17 @@ E2E 테스트 라이브러리는 대체로 무겁고, 느립니다 왜냐하면
 5. 2행에 대한 checkbox 클릭 확인
 6. 삭제버튼 클릭 확인
 7. 빈 테이블 및 no data text 확인
-8. 현황,결과 아티팩트 확인 및 다운로드
+8. pr 요청 이미 만들었기 때문에 일단 시연..
+9. 현황,결과 아티팩트 확인 및 다운로드
 
 ### 3.5 한계
 #### 포괄적인 Selector 
 `page.getByRole('button', { name: '미완료' }).click()`. 
 위코드는 자동생성 기능을 사용했을때 얻은 테스트 코드로 어떤 행의 미완료 버튼인지 알 수 없습니다.  
-
 `await page.getByRole('button', { name: '미완료' }).nth(1).click()`. 
 자동생성기능은 blueprint 개념으로 생성한 이후, 점검 및 수정을 하는 방향으로 개선 할 수 있습니다.
 
-```typescript
-// auto
-
-
-```
-
-
-# 4. Agenda
-## 4.1 Discuss
-- TBD Report 저장방식
-- Test Directory Structure
-  - 테스트 폴더 분리하여 배치
-    - test/e2e/{page}, test/unit/{service}, test/component/{service}
-  - 각 파일 디렉토리와 동일하게 배치
-    - src/components/{component}.spec.ts, src/pages/{page}.spec.ts
-  - 디렉토리별 test 폴더 배치
-    -   src/components/{service}/A.ts
-    -   src/components/{service}/test/A.spec.ts
--   vue-tsc 타입체크를 CI 과정에 포함시킬것인지
-
-
-## 4.2 TODO
-- [ ] 코드, 예시 첨부
-- [ ] Test Code 작성에 대한 컨벤션 정의
-
-# 5. 테스트란?
-# 6. Refer
+# 4. Refer
 - https://docs.cypress.io/guides/core-concepts/testing-types
 - https://playwright.dev/docs/intro
 - https://wiki.abacussw.co.kr/ko/technote/frontend/javascript/vue-library/full-calendar
