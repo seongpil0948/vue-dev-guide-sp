@@ -43,7 +43,7 @@ const deleteTodo = () => {
       </el-form-item>
     </el-form>
     <div class="w-1/2 mx-auto">
-      <el-table ref="todoTable" :data="todoList" style="width: 100%">
+      <el-table ref="todoTable" data-testid="todoTable" :data="todoList" style="width: 100%" row-class-name="data-test-row">
         <el-table-column type="selection" width="55" />
         <el-table-column prop="text" label="Text">
           <template #default="{ row }">

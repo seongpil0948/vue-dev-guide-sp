@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices, expect } from '@playwright/test'
 
 /**
  * Read environment variables from file.
@@ -9,9 +9,10 @@ import { defineConfig, devices } from '@playwright/test'
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+const E2E_PATH = './test/report'
 export default defineConfig({
-  testDir: './test/e2e',
-  timeout: 30 * 1000,
+  testDir: E2E_PATH,
+  timeout: 5000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
@@ -28,13 +29,17 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html', { outputFolder: E2E_PATH, outputFile: 'report.html' }],
+    ['json', { outputFolder: E2E_PATH, outputFile: `${E2E_PATH}/report.json` }],
+    ['./test/reporter.ts'],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:3333',
     /* Only on CI systems run the tests headless */
     headless: !!process.env.CI,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -86,9 +91,27 @@ export default defineConfig({
      * Use the preview server on CI for more realistic testing.
     Playwright will re-use the local server if there is already a dev-server running.
      */
-    // command: process.env.CI ? 'vite preview --port 5173' : 'vite dev',
-    command: process.env.CI ? ' pnpm run preview --port 5173' : 'vite dev',
-    port: 5173,
+    // command: process.env.CI ? 'vite preview --port 3333' : 'vite dev',
+    command: process.env.CI ? ' pnpm run preview --port 3333' : 'vite dev',
+    port: 3333,
     reuseExistingServer: !process.env.CI,
+  },
+})
+
+expect.extend({
+  toBeWithinRange(received: number, floor: number, ceiling: number) {
+    const pass = received >= floor && received <= ceiling
+    if (pass) {
+      return {
+        message: () => 'passed',
+        pass: true,
+      }
+    }
+    else {
+      return {
+        message: () => 'failed',
+        pass: false,
+      }
+    }
   },
 })
