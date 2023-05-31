@@ -9,9 +9,10 @@ import { defineConfig, devices, expect } from '@playwright/test'
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const E2E_PATH = './test/report'
+const TEST_REPORT_PATH = './test/report'
+const TEST_E2E_PATH = './test/e2e'
 export default defineConfig({
-  testDir: E2E_PATH,
+  testDir: TEST_E2E_PATH,
   timeout: 5000,
   expect: {
     /**
@@ -30,8 +31,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html', { outputFolder: E2E_PATH, outputFile: 'report.html' }],
-    ['json', { outputFolder: E2E_PATH, outputFile: `${E2E_PATH}/report.json` }],
+    ['html', { outputFolder: TEST_REPORT_PATH, outputFile: 'report.html' }],
+    ['json', { outputFolder: TEST_REPORT_PATH, outputFile: `${TEST_REPORT_PATH}/report.json` }],
     ['./test/reporter.ts'],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
