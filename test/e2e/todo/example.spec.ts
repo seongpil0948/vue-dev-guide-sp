@@ -7,8 +7,11 @@ test.describe('Todo CRUD ', () => {
     await page.goto(MAIN_ROUTE) // Go to the starting url before each test.
   })
   test('create todo', async ({ page }) => {
+    await page.waitForSelector('[data-test-id="todo-table"]')
+    await page.screenshot({ path: 'screenshots/todo/before-create.png', fullPage: true })
     await createTwoTodo(page)
     expect((await page.$$('.data-test-row')).length).toEqual(2)
+    await page.screenshot({ path: 'screenshots/todo/after-create.png', fullPage: true })
   })
   test('update todo checkbox', async ({ page }) => {
     await createTwoTodo(page)

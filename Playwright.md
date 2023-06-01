@@ -1,29 +1,33 @@
 # Playwright 시작하기
 
 - [Playwright 시작하기](#playwright-시작하기)
-  - [1. 왜 Test, Playwright를 써야할까?](#1-왜-test-playwright를-써야할까)
+  - [왜 Test, Playwright를 써야할까?](#왜-test-playwright를-써야할까)
     - [수백줄에 달하는 **단위 테스트 케이스** 목록](#수백줄에-달하는-단위-테스트-케이스-목록)
-      - [Playwright는](#playwright는)
+      - [Playwright 도입 효과](#playwright-도입-효과)
     - [아예 수동 테스트를 진행하지 않을 수 있다.](#아예-수동-테스트를-진행하지-않을-수-있다)
-      - [Playwright는](#playwright는-1)
+      - [Playwright 도입 효과](#playwright-도입-효과-1)
   - [Playwright란?](#playwright란)
-    - [설치하기](#설치하기)
     - [시작하기](#시작하기)
-    - [특징](#특징)
+    - [로컬에서 테스트 코드 작성하기](#로컬에서-테스트-코드-작성하기)
+      - [결론](#결론)
+    - [TODO 어떻게 효율적으로 테스트코드를 작성할 수 있을까](#todo-어떻게-효율적으로-테스트코드를-작성할-수-있을까)
+    - [Playwright 특징](#playwright-특징)
       - [Test generator](#test-generator)
-    - [2.2 Inspector](#22-inspector)
-    - [2.3 경량성](#23-경량성)
-    - [2.4 폭넓은 렌더링 엔진을 지원](#24-폭넓은-렌더링-엔진을-지원)
-  - [3. 활용방안 시연 및 테스트](#3-활용방안-시연-및-테스트)
-    - [3.1 그래서 우리는 어떻게 테스트 해야할까?](#31-그래서-우리는-어떻게-테스트-해야할까)
-    - [3.2 세팅(Prerequisite)](#32-세팅prerequisite)
-    - [3.3 테스트 작성 과정.](#33-테스트-작성-과정)
-    - [3.4 시연 시나리오(Test generator)](#34-시연-시나리오test-generator)
-    - [3.5 시연 시나리오(테스트 과정)](#35-시연-시나리오테스트-과정)
-    - [3.6 한계](#36-한계)
-      - [3.6.1 포괄적인 Selector](#361-포괄적인-selector)
-      - [TODO 무엇을 더 할 수 있을까?](#todo-무엇을-더-할-수-있을까)
-- [4. Advanced](#4-advanced)
+      - [Reporter](#reporter)
+      - [디버깅](#디버깅)
+      - [API 테스트](#api-테스트)
+        - [이는 API 목업/프록시 테스트 또한 가능하다는 말과 같습니다.](#이는-api-목업프록시-테스트-또한-가능하다는-말과-같습니다)
+      - [Authenticate](#authenticate)
+          - [Http Auth를 위한 예제](#http-auth를-위한-예제)
+      - [Trace viewer](#trace-viewer)
+      - [Inspector](#inspector)
+      - [경량성](#경량성)
+      - [폭넓은 렌더링 엔진을 지원](#폭넓은-렌더링-엔진을-지원)
+  - [제한 및 결정해야 할 내용](#제한-및-결정해야-할-내용)
+    - [산출물의 종류에 대한 고민](#산출물의-종류에-대한-고민)
+    - [포괄적인 Selector](#포괄적인-selector)
+    - [실험적 기능인 컴포넌트 테스팅](#실험적-기능인-컴포넌트-테스팅)
+- [Advanced](#advanced)
   - [테스트 도입에 대한 개발자 관점](#테스트-도입에-대한-개발자-관점)
     - [결국 QA팀, 개발팀의 검수가 필요하지 않을까?](#결국-qa팀-개발팀의-검수가-필요하지-않을까)
     - [변수 시나리오 Chaining에 대한 제한](#변수-시나리오-chaining에-대한-제한)
@@ -36,23 +40,28 @@
 - [5. Refer](#5-refer)
 
 
-## 1. 왜 Test, Playwright를 써야할까?
-우리는 소프트웨어 개발자 입니다. 
-당연하게도 우리팀의 작품이 완벽을 추구해야 한다 가 첫번째 이유 입니다.
-높은 테스트 커버리지를 보유한 프로젝트는 자신감을 가질 수 밖에 없습니다.
+## 왜 Test, Playwright를 써야할까?
+
+모든 개발자들은 프로젝트가 커지면 커질수록, 내가 쏘아올린 작은 코드조각이 전체 프로젝트에 미칠 영향을 걱정합니다. 하지만,
+**Playwright**는 우리에게 확신을 줍니다. "너의 코드는 문제없어, 내가 보장할게."
+
+대부분의 개발자들은 테스트 코드를 작성해야 하는 것을 너무나 잘 알고있습니다.그렇지만 빠듯한 일정에 대부분 도입을 주저하죠
+하지만, **Playwright**는 우리에게 확신을 줍니다. "페이지 좀 보자, 코드는 내가 만들게"
+
+
 ### 수백줄에 달하는 **단위 테스트 케이스** 목록
 매 배포마다 수십 페이지에 해당하는 수백개의 케이스를 점검을 해보겠습니다..
 첫번째 테스트: **난 완벽주의 개발자!**  자부심을 갖고 꼼꼼하게 테스트 합니다
 두번째 테스트: **하루종일 테스트 할 수 있지** 지치지 않습니다 테스트 합니다. 
 ...
 19번째 테스트: ~~input element 하나 추가한건데 해야해?..~~ 테스트 하긴 합니다.
-#### Playwright는
+#### Playwright 도입 효과
 E2E 테스트 기능을 통하여, 매 배포마다 모든 시나리오에 대해 Chrome, Firefox, IPhone 실제 브라우저엔진, Emulator 를 구동하여 개발환경이 아닌 사용자 환경에서 검증 할 수 있습니다.
 
 ### 아예 수동 테스트를 진행하지 않을 수 있다.
 프로젝트를 진행 할 때, 우리는 개발환경을 분리합니다. ex) develope, staging, alpha, beta production
 Playwright는 우리에게 선택지를 쥐어줍니다. "QA 및 수동테스트는 **alpha** 이상", "그 **이전버전**은 테스트 코드를 이용해 검증한다."
-#### Playwright는
+#### Playwright 도입 효과
 지시사항: Input Element 추가해주세요.
 1. 코드작성
 ```html
@@ -65,84 +74,304 @@ Playwright는 우리에게 선택지를 쥐어줍니다. "QA 및 수동테스트
 
 ## Playwright란?
 Playwright는 웹 애플리케이션 테스트 및 자동화를 위한 오픈 소스 도구입니다.
-브라우저(Chrome, Firefox, Safari 등)를 제어하고 사용자의 행동(클릭, 키 입력, 네비게이션 등)을 시뮬레이션하는 기능을 제공합니다.
-
-### 설치하기
+브라우저(Chrome, Firefox, Safari 등)를 제어하고 사용자의 행동(클릭, 키 입력, 네비게이션 등)을 
+시뮬레이션하는 기능을 제공합니다.
 
 ### 시작하기
-TODO 설치완료된 스크린샷 첨부
-1. `pnpm dlx create-playwright` 명령어를 입력합니다.
-2. 설치가 완료 된 경우 `playwright.config.ts` 파일이 생긴 것을 확인 할 수 있습니다.
-3. vscode 에디터인경우 [익스텐션 설치](https://playwright.dev/docs/getting-started-vscode)를 참고해주세요.
+1. 다음 명령어를 사용하여 vue 프로젝트를 생성합니다. 
+`git clone git@github.com:socketbear/vue-dev-guide.git` 
+2. `pnpm dlx create-playwright` 명령어를 입력합니다.
 문제가 있을 경우, [공식 설치페이지](https://playwright.dev/docs/intro#installing-playwright)를 참고 해주세요.
-### 특징 
+- e2e 테스트 경로는 `test/e2e`로 설정합니다
+- Github Action 워크플로우는 설정하지 않습니다.
+- 처음 설치한 경우 테스트 브라우저 엔진은 설치하지 않습니다.
+```
+✔ Where to put your end-to-end tests? · test/e2e
+✔ Add a GitHub Actions workflow? (y/N) · false
+✔ Install Playwright browsers (can be done manually via 'pnpm exec playwright install')? (Y/n) · true
+```
+3. 설치가 완료 확인을 위해 파일목록을 확인하세요.
+- 추가된 파일
+```
+playwright.config.ts
+test/e2e/
+tests-examples/
+```
+- 수정된 파일
+```
+.gitignore
+package.json
+pnpm-lock.yaml
+```
+
+4. vscode 에디터인경우 [익스텐션 설치](https://playwright.dev/docs/getting-started-vscode)를 참고해주세요. (하단 익스텐션 설치 완료시 화면)
+<br />
+![screenshot_2023-06-01_at_1.15.40_pm.png](/성필/screenshot_2023-06-01_at_1.15.40_pm.png)
+
+5. package.json 파일의 scripts 프로퍼티에 아래 명령어를 추가 하십시오.
+ [관련문서](https://playwright.dev/docs/running-tests)
+```
+    "test:e2e": "pnpm exec playwright test",
+    "test:e2e:debug": "pnpm exec playwright test --debug",
+    "test:e2e:report": "pnpm exec playwright show-report",
+    "test:e2e:ui": "pnpm exec playwright test --ui",
+    "test:e2e:gen": "pnpm exec playwright codegen",
+```
+6. `pnpm run test:e2e:ui` 를 실행하면 아래 사진과 같이 윈도우를 확인 할 수 있습니다.
+![playwright-ui-home.png](/성필/playwright-ui-home.png)
+7. 위사진의 Run 버튼을 눌러주세요.
+아래와 같이 뜬다면, **축하합니다!** 당신은 테스트 코드의 실행을 완료 한 것입니다!
+![playwright-ui-allapssed.png](/성필/playwright-ui-allapssed.png)
+
+### 로컬에서 테스트 코드 작성하기
+1. playwright.config.ts 파일을 열어 아래 옵션들을 추가합니다.
+```json
+{
+  use: {
+    /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
+    // actionTimeout: 0,
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: 'http://localhost:3333',
+    /* Only on CI systems run the tests headless */
+    headless: !!process.env.CI,
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: 'on-first-retry',
+  },  
+  webServer: {
+    /**
+     * Use the dev server by default for faster feedback loop.
+     * Use the preview server on CI for more realistic testing.
+    Playwright will re-use the local server if there is already a dev-server running.
+     */
+    // command: process.env.CI ? 'vite preview --port 3333' : 'vite dev',
+    command: process.env.CI ? ' pnpm run preview --port 3333' : 'vite dev',
+    port: 3333,
+    reuseExistingServer: !process.env.CI,
+  },
+}
+```
+2. `pnpm run dev` 명령어로 로컬 서버를 실행 시킵니다.
+2. 사진과 같이 vscode 익스텐션에서 경로를 포커싱하여 파일 위치를 지정합니다.
+![playwright-extnsion-main.png](/성필/playwright-extnsion-main.png)
+3. 하단의 Record new 버튼을 클릭합니다.
+4. 테스트 브라우저의 주소창에 `http://localhost:3333/guide/samp/el-todo` 를 입력합니다.
+5. todo 항목을 입력하고 추가 테스트 해봅니다.
+6. playwright - code generte 기능을 통해 테스트 코드가 생성 되었음을 확인하세요
+```javascript
+import { expect, test } from '@playwright/test'
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:3333/guide/samp/el-todo')
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').click()
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').fill('소금빵을 산다')
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').press('Enter')
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').click()
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').fill('밥을 먹는다.')
+})
+```
+7. 좋습니다. 이제 생성된 2개의 todo목록에 대한 검증을 위한 코드를 한 줄 추가하겠습니다.
+`expect((await page.$$('.data-test-row')).length).toEqual(2)`
+8. 다시 마우스 커서를 test 함수 바깥으로 위치하고 이전 `Record new`하단의 Record at cursor를 클릭합니다.
+9. 그리고 todo 데이터를 생성하고, 미완료/완료로 상태변경하는 테스트를 진행 하십시오.
+10. 같은 과정을 반복하여 체크박스 상태변경, todo 데이터 삭제 테스트를 진행 -> 검증코드 추가하면 다음과 같은 코드를 완성 할 수 있습니다.
+
+```javascript
+import { type Page, expect, test } from '@playwright/test'
+// API: https://playwright.dev/docs/writing-tests#navigation
+
+const MAIN_ROUTE = 'http://localhost:3333/guide/samp/el-todo'
+test.describe('Todo CRUD ', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(MAIN_ROUTE) // Go to the starting url before each test.
+  })
+  test('create todo', async ({ page }) => {
+    await page.waitForSelector('[data-test-id="todo-table"]')
+    await page.screenshot({ path: 'screenshots/todo/before-create.png', fullPage: true })
+    await createTwoTodo(page)
+    expect((await page.$$('.data-test-row')).length).toEqual(2)
+    await page.screenshot({ path: 'screenshots/todo/after-create.png', fullPage: true })
+  })
+  test('update todo checkbox', async ({ page }) => {
+    await createTwoTodo(page)
+    await page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('span').nth(1).click()
+    await expect(page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('label.el-checkbox')).toHaveClass(/is-checked/)
+    await page.getByRole('row', { name: '밥을 먹는다. 미완료', exact: true }).locator('span').nth(1).click()
+    await expect(page.getByRole('row', { name: '밥을 먹는다. 미완료' }).locator('label.el-checkbox')).toHaveClass(/is-checked/)
+
+    await page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('span').nth(1).click()
+    await expect(page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('label.el-checkbox')).not.toHaveClass(/is-checked/)
+    await page.getByRole('row', { name: '밥을 먹는다. 미완료', exact: true }).locator('span').nth(1).click()
+    await expect(page.getByRole('row', { name: '밥을 먹는다. 미완료' }).locator('label.el-checkbox')).not.toHaveClass(/is-checked/)
+  })
+  test('update todo status', async ({ page }) => {
+    await createTwoTodo(page)
+    await page.getByRole('row', { name: '소금빵을 산다' }).getByRole('button', { name: '미완료' }).click()
+    await expect(page.getByRole('row', { name: '소금빵을 산다' })).not.toContainText(/미완료/)
+    await expect(page.getByRole('row', { name: '소금빵을 산다' })).toContainText(/완료/)
+    await page.getByRole('row', { name: '소금빵을 산다 완료' }).getByRole('button', { name: '완료' }).click()
+    await expect(page.getByRole('row', { name: '소금빵을 산다 미완료' })).toContainText(/미완료/)
+  })
+  test('delete all todo', async ({ page }) => {
+    await createTwoTodo(page)
+    await page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('span').nth(1).click()
+    await page.getByRole('row', { name: '밥을 먹는다. 미완료' }).locator('span').nth(1).click()
+    await page.getByRole('button', { name: '삭제' }).click()
+  })
+})
+
+async function createTwoTodo(page: Page) {
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').click()
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').fill('소금빵을 산다')
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').press('Enter')
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').click()
+  await page.getByPlaceholder('TO-DO 항목을 입력해주세요.').fill('밥을 먹는다.')
+  await page.getByRole('button', { name: '추가' }).click()
+}
+```
+11. 명령어를 통해 방금 만들 코드를 실행해 봅시다.
+`pnpm run test:e2e test/e2e/test-1.spec.ts`
+저런 테스트가 실패하며 Playwright Test Report 타이틀을 가진 사이트가 열립니다.
+![screenshot_2023-06-01_at_2.40.35_pm.png](/성필/screenshot_2023-06-01_at_2.40.35_pm.png)
+12. `.data-test-row` class 를 가진 row 목록을 받아오려 했지만 실패했습니다.
+**important**: 테스트에 사용될 selector는 반드시 data-test prefix로 가져야 합니다.
+13. src/guide/pages/samp/el-todo.vue 파일의 el-table 엘리먼트의 속성()을 추가합니다.
+row-class-name="data-test-row 속성 추가
+`<el-table data-test-id="todo-table" :data="todoList" style="width: 100%" row-class-name="data-test-row">`
+14. 다시 11번 과정을 테스트 합니다.
+15. 테스트 성공 결과 확인
+
+#### 결론
+~ 15번 까지의 테스트를 통해, 우리는 다음과 같은 사실을 알 수 있습니다.
+- 우리는 배포/로컬 서버를 통해 테스트 코드를 진행 할 수 있다.
+- 기본적인 테스트 코드들을 playwright 를 통해 자동 생성 할 수 있다.
+- 테스트 결과, 에러정보를 산출물로 얻을 수 있다.
+- 스크린샷 기능을 통해, 테스트 케이스 전 후 비교된 산출물을 얻을 수 있다
+
+### TODO 어떻게 효율적으로 테스트코드를 작성할 수 있을까
+우리는 아직도 QA 및 수동테스트를 통해 static(eslint, typescript), unit, integration, e2e, 
+component, smocking, api...etc 수 많은 테스트 없이 자부심을 갖고 앱을 출시 할 수 있다고 생각할까요? 그렇다고 trade-off인 테스트 코드 작성에 있어 커버리지 70% 이상을 목표로 삼는 것은 성공한 자사의 앱이 아닌이상 저도 납득 할 수 없는 작업일 것입니다.
+클라이언트 및 유저 관점에서 테스트가 필요하다 판단되는 부분을 잘 선별하는 것이 사업특성에 있어 효율적인 개발로 볼 수 있습니다
+
+### Playwright 특징 
 
 #### Test generator
-TDD 최대 난제 중 하나인 개발비용 단축에 대한 기능이자 우리가 이 라이브러리를 도입 하고자하는 핵심 기능입니다.  
-`npx playwright codegen demo.playwright.dev/todomvc`
+브라우저와 상호작용을 통해 원하는 테스트 코드를 자동생성 할 수 있습니다.
+TDD 최대 난제 중 하나인 개발비용 단축에 대한 기능이자 핵심기능 중 하나입니다.
 
-~~테스트 커버리지를 계산, 모든 파일에 대한 테스트 파일 생성을 기대했으나...~~
-### 2.2 Inspector
-익숙한 Vue Inspector처럼 Playwright 또한 Inspector를 제공합니다.
-이기능은 2개의 window(한쪽은 개발앱 다른쪽은 inspector)를 열게되고
-클릭등의 인터랙션을 통해 테스트의 생성, 녹화, 복사, 삭제. 언어변경이가능합니다.
+아래 명령어를 실행하여, URL 주소에 대한 테스트 생성 기능을 테스트 해보세요.
+[관련문서](https://playwright.dev/docs/codegen)
+`npx playwright codegen {URL}`
+`npx playwright codegen --viewport-size=800,600  demo.playwright.dev/todomvc`
+`npx playwright codegen --device="iPhone 13" demo.playwright.dev/todomvc`
+~~테스트 커버리지를 계산, 모든 파일에 대한 테스트 파일 생성을 기대했으나... 실패~~
+#### Reporter
+- HTML
+  - 파일(페이지) - 테스트 그룹 - 테스트 케이스로 분류된 목록
+  - pass/fail/skip 필터링
+  - 검색
+- Screenshot
+  - 테스트 코드중 설정에 따라 programmatic 또는 자동 으로 테스트 장면을 저장 가능
+- JSON/Custom Reporter
+  - 엑셀 라이브러리를 이용하여, 커스텀한 엑셀을 생성 및 제공 할 수 있습니다.
+  - 그 외 고객의 요구사항에 맞게 커스터마이징한 Reporter 를 제공 할 수 있습니다.
+#### 디버깅
+vscode 익스텐션을 활용, 테스트중 
+- breakpoint등 (builtin)디버깅 기능들을 사용 할 수 있습니다.
+- 실시간 브라우저 윈도우 와 IDE 를 비교하며 에러를 수정 할 수 있습니다.
+#### API 테스트
+REST API 통신과 관련된 테스트를 제공합니다.
+- E2E 와 별도로 API 테스트를 위해서 HTTP 통신을 통해 서버 테스트가 가능합니다.
+- E2E 테스트 도중, 혹은 setup/teardown 훅에서 자유롭게 HTTP 통신을 할 수 있습니다.
+- playwright는 모든 네트워크 트래픽에 대한 모니터링, 수정이 가능합니다.
+##### 이는 API 목업/프록시 테스트 또한 가능하다는 말과 같습니다.
+```javascript
+const browser = await chromium.launch({
+  proxy: {
+    server: 'http://myproxy.com:3128',
+    username: 'usr',
+    password: 'pwd'
+  }
+});
+```
 
-### 2.3 경량성
+[관련문서](https://playwright.dev/docs/api-testing)
+#### Authenticate
+어떤 유저인증 전략이든, 유저 인증 정보를 브라우저 혹은 파일로 저장하게 됩니다.
+`await page.context().storageState({ path: authFile });`
+우리는 계정정보를 파일로서 관리하고, 로그인 과정에 사용 할 수 있습니다.
+```javascript
+    await page.goto('https://github.com/login');
+    await page.getByLabel('Username or email address').fill(account.username);
+    await page.getByLabel('Password').fill(account.password);
+    await page.getByRole('button', { name: 'Sign in' }).click();
+    await page.waitForURL('https://github.com/');
+    await expect(page.getByRole('button', { name: 'View profile and more' })).toBeVisible();
+```
+위 코드는 저장된 계정을 통해 로그인하고, 쿠키가 저장된 상태로 홈페이지로의 리다이렉션을 대기하는 테스트 케이스를 작성 할 수 있습니다.
+###### Http Auth를 위한 예제
+```javascript
+const context = await browser.newContext({
+  httpCredentials: {
+    username: 'bill',
+    password: 'pa55w0rd',
+  },
+});
+const page = await context.newPage();
+await page.goto('https://example.com');
+```
+
+
+#### Trace viewer
+Playwright는 테스트가 실패 하였을때(변경가능), 
+다음 항목들의 내역을 zip파일로 저장합니다. 
+- 인터렉션 로그, 스냅샷(스크린샷), 
+- 테스트 소스 코드 ,  
+- 네트워크 로그
+- 테스트 사양, 환경
+[trace.playwright.dev](https://trace.playwright.dev/) 링크 혹은
+아래 명령어를 사용하여, 정보를 확인 할 수 있습니다.
+`npx playwright show-trace trace.zip`
+
+[관련문서](https://playwright.dev/docs/trace-viewer)
+#### Inspector
+익숙한 Vue Inspector처럼 Playwright 또한 GUI 툴을 제공합니다.
+클릭등의 인터랙션을 통해 
+- 실시간으로 테스트의 생성, 정지,수정 녹화, 복사, 삭제. 언어변경이가능합니다.
+- 브라우저 엘리먼트의 selector를 실시간으로 추출 할 수 있습니다.
+- 브라우저 액션에 대한 로그를 확인 할 수 있습니다.
+
+
+
+#### 경량성
 E2E 테스트 라이브러리는 대체로 무겁고, 느립니다 왜냐하면 테스트 브라우저를 설치하고
 매 Test suite(case의 모음)별 브라우저 엔진을 재가동, 재 렌더링해야 하기 때문이죠
 저는 Cypress를 사용했었을때 직관적이고 많은 기능을 가지고 있었지만, 많은 기능을 가진 프레임워크 특징인 확장성문제, 커스터마이징 시간소요, 느린 속도로 인해 반드시 구현해야 했던 병렬처리등으로 진행중 삭제한 경험이 있습니다.
 이에 playwright는 cypress 패키지 사이즈 기준 200배 경량화된 용량, 훨씬 빠른 체감속도로, 최적화에 많은 노력을 기울이고 있습니다.
 `Cypress(4.99 MB) > Nightwatch(webdriver required) > Playwright(24.2 kB)`
 
-### 2.4 폭넓은 렌더링 엔진을 지원
-   1. 크로미움, 웹킷, 파이어폭스, 
-   2. 윈도우, 리눅스, MacOS
-   3. headless, headed, 모바일 **emulator**(chrome for android, safari for ios)
+#### 폭넓은 렌더링 엔진을 지원
+1. 크로미움, 웹킷, 파이어폭스, 
+2. 윈도우, 리눅스, MacOS
+3. headless, headed, 모바일 **emulator**(chrome for android, safari for ios)
 
-## 3. 활용방안 시연 및 테스트
-### 3.1 그래서 우리는 어떻게 테스트 해야할까?
-INWORK
-효율적으로 테스트 하는방법
-### 3.2 세팅(Prerequisite)
-1. vscode 익스텐션 [__ms-playwright.playwright__](https://playwright.dev/docs/getting-started-vscode) 설치
-   1. 또는 https://playwright.dev/docs/intro 를 통해 설치 가능합니다.
+[관련 문서](https://playwright.dev/docs/browsers)
 
-### 3.3 테스트 작성 과정.
-1. 개발된 기능을 localhost 환경에서 구동합니다.
-3. `npx playwright codegen {URL}`을 통해 [Test generator](#test-generator) 를 활용, 테스트 코드를 작성합니다.
-4. 로컬 환경에서 `test:e2e:ui`(browser),  `pnpm run test:e2e:debug`(vscode)를 이용하여 
-테스트합니다 
-   1. [관련문서](https://playwright.dev/docs/running-tests)
-5. `test:e2e:report`를 통해 면밀히 확인합니다.
-6. 개발계 브랜치로 PR/MR을 생성,테스트 과정을 녹화하고, 자동화 테스트를 통해 증명합니다.
+## 제한 및 결정해야 할 내용
 
-### 3.4 시연 시나리오(Test generator) 
-1. 서버 구동
-2. 
-### 3.5 시연 시나리오(테스트 과정) 
-1. local 환경 테스트 window 구동(e2e:ui) 확인
-2. 할일 인덱스 페이지 접근 (http://localhost:3333/guide/samp/el-todo) 확인
-3. 2개의 데이터 추가 확인
-4. 생성된 2행을 selector 를 통해 확인
-5. 2행에 대한 checkbox 클릭 확인
-6. 삭제버튼 클릭 확인
-7. 빈 테이블 및 no data text 확인
-8. pr 요청 이미 만들었기 때문에 일단 시연..
-9. 현황,결과 아티팩트 확인 및 다운로드
-
-### 3.6 한계
-#### 3.6.1 포괄적인 Selector 
+### 산출물의 종류에 대한 고민
+- 엑셀로 페이지 > 테스트 모음 > 케이스 별 분류된 엑셀
+### 포괄적인 Selector
 `page.getByRole('button', { name: '미완료' }).click()`. 
 위코드는 자동생성 기능을 사용했을때 얻은 테스트 코드로 어떤 행의 미완료 버튼인지 알 수 없습니다.  
 `await page.getByRole('button', { name: '미완료' }).nth(1).click()`. 
 자동생성기능은 blueprint 개념으로 생성한 이후, 점검 및 수정을 하는 방향으로 개선 할 수 있습니다.
-#### TODO 무엇을 더 할 수 있을까?
-- 엑셀로 페이지 > 테스트 모음 > 케이스 별 분류된 엑셀
-우리는 아직도 QA 및 수동테스트를 통해 static(eslint, typescript), unit, integration, e2e, 
-component, smocking, api...etc 수 많은 테스트 없이 자부심을 갖고 앱을 출시 할 수 있다고 생각할까요? 그렇다고 trade-off인 테스트 코드 작성에 있어 커버리지 70% 이상을 목표로 삼는 것은 성공한 자사의 앱이 아닌이상 저도 납득 할 수 없는 작업일 것입니다.
-클라이언트 및 유저 관점에서 테스트가 필요하다 판단되는 부분을 잘 선별하는 것이 사업특성에 있어 효율적인 개발로 볼 수 있습니다.
-# 4. Advanced
 
+### 실험적 기능인 컴포넌트 테스팅
+문서 작성일 기준, vite, vue, pinia 에 대한 플러그인, 호환을 지원하지만
+아직 실험적 기능이며, 컴포넌트 테스팅을 도입하기 위해서 추가 테스트가 필요합니다.
+[관련문서](https://playwright.dev/docs/test-components)
+
+# Advanced
 ## 테스트 도입에 대한 개발자 관점
 ### 결국 QA팀, 개발팀의 검수가 필요하지 않을까?
 당연히 인간의 QA는 필수입니다.하지만 QA 와 테스트코드의 작성은 완전한 교집합이 아닙니다.  
@@ -213,23 +442,14 @@ const unsubscribeAuth = authStore.$onAction(
 - 개발업체를 선정하는 부분에 있어, 업체 별 산출물의 정리과정중 __소프트웨어 테스트__ 관련 문서는 고려대상이 아닐 수 없습니다.
 클라이언트 입장에서, 테스트를 전적으로 우리회사에게 맡기는 경우는 거의 존재하지 않습니다.
 각 회사는 개발팀부터 QA팀, PM, PL까지 많은 인력 소모를 감수하여, 매 배포시 테스트를 진행합니다.
-우리는 __playwright__ 의 __reporter__ 의 기능은 다음과 같습니다. 
-- HTML
-  - 파일(페이지) - 테스트 그룹 - 테스트 케이스로 분류된 목록
-  - pass/fail/skip 필터링
-  - 검색
-- Screenshot
-  - 테스트 코드중 설정에 따라 programmatic 또는 자동 으로 테스트 장면을 저장 가능
-- JSON/Custom Reporter
-  - 엑셀 라이브러리를 이용하여, 커스텀한 엑셀을 생성 및 제공 할 수 있습니다.
-  - 그 외 고객의 요구사항에 맞게 커스터마이징한 Reporter 를 제공 할 수 있습니다.
+우리는 __playwright__ 의 [reporter](#reporter) 기능을 통해,
+고객에 맞는 산출물을 제공 할 수 있습니다.
 
 ### 결국 신뢰를 얻습니다.
 **처음** 파트너쉽을 맺은 경우, 신중한 클라이언트들은 테스트의 결과를 믿지 못할 수 있습니다.
 지속적인 검증을 통해 점차 테스트 결과서를 **신뢰하고**, 신뢰된 산출물을 바탕으로 소통 할 수 있다는 것은
 - 커뮤니케이션 입장에서 매우 **효율적이고 안정적인 업무**가 가능합니다.
 - 장기적인 파트너쉽 유지에 도움이 됩니다.
-
 
 ## 그래서 왜 Playwright?
 먼저 vitest, vue3는 unit, component 공식 unit/component 테스트 라이브러리로 vitest를 사용하고 있습니다 하지만

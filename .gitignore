@@ -18,3 +18,4 @@ mock/rest/.validation.json
 /test-out/
 /playwright-report/
 /playwright/.cache/
+/screenshots/
