@@ -66,6 +66,7 @@
     "vite-ssg": "^0.20.2",
     "vite-ssg-sitemap": "^0.3.1",
     "vitest": "^0.21.0",
-    "vue-tsc": "^0.39.5"
+    "vue-tsc": "^0.39.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   }
 }
