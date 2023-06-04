@@ -19,3 +19,4 @@ mock/rest/.validation.json
 /playwright-report/
 /playwright/.cache/
 /screenshots/
+*.xlsx

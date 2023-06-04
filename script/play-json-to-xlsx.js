@@ -11,7 +11,7 @@ const result = parseSuiteList(suites)
 const worksheet = XLSX.utils.json_to_sheet(result)
 const workbook = XLSX.utils.book_new()
 XLSX.utils.book_append_sheet(workbook, worksheet, 'test result')
-XLSX.writeFile(workbook, 'playwright-report/result.xlsx')
+XLSX.writeFile(workbook, './result.xlsx')
 
 function parseSuiteList(suites) {
   const result = []
