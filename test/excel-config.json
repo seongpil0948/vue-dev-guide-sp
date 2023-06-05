@@ -1,0 +1,12 @@
+{
+  "excelInputPath": "test/asset/unit-test-case.xlsx",
+  "excelOutputPath": "playwright-result-others/result.xlsx",
+  "jsonReporterPath": "playwright-result-others/result.json",
+  "caseSheetName": "블라인드",
+  "translator": {
+    "testName": "케이스명",
+    "ok": "통과여부",
+    "title": "테스트명",
+    "fileName": "테스트 그룹명"
+  }
+}

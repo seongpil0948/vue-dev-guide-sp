@@ -20,3 +20,4 @@ mock/rest/.validation.json
 /playwright/.cache/
 /screenshots/
 *.xlsx
+playwright-result*

@@ -31,8 +31,8 @@ export default defineConfig({
   // https://playwright.dev/docs/trace-viewer#recording-a-trace-on-ci
   // outputDir: 'test-out',
   // Reporter to use. See https://playwright.dev/docs/test-reporters
-  reporter: 'html',
-  // reporter: [['html', { outputFolder: 'playwright-result-html', outputFile: 'result.html' }], ['json', { outputFolder: 'playwright-result-json', outputFile: 'result.json' }]],
+  // reporter: 'html',
+  reporter: [['html', { outputFolder: 'playwright-result-html', outputFile: 'result.html' }], ['json', { outputFile: 'playwright-result-others/result.json' }]],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
