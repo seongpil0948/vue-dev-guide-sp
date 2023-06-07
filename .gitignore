@@ -21,3 +21,4 @@ mock/rest/.validation.json
 /screenshots/
 *.xlsx
 playwright-result*
+excel-reporter-result

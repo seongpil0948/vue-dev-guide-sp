@@ -1,4 +1,5 @@
 import { defineConfig, devices, expect } from '@playwright/test'
+import type { IExcelConfig } from 'test/excel-reporter'
 
 /**
  * Read environment variables from file.
@@ -12,7 +13,7 @@ import { defineConfig, devices, expect } from '@playwright/test'
 const TEST_E2E_PATH = './test/e2e'
 export default defineConfig({
   testDir: TEST_E2E_PATH,
-  // timeout: 5000,
+  timeout: 5000,
   // expect: {
   /**
      * Maximum time expect() should wait for the condition to be met.
@@ -29,10 +30,14 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   // https://playwright.dev/docs/trace-viewer#recording-a-trace-on-ci
-  // outputDir: 'test-out',
+  outputDir: 'test-out',
   // Reporter to use. See https://playwright.dev/docs/test-reporters
   // reporter: 'html',
-  reporter: [['html', { outputFolder: 'playwright-result-html', outputFile: 'result.html' }], ['json', { outputFile: 'playwright-result-others/result.json' }]],
+  reporter: [
+    ['html', { outputFolder: 'playwright-result-html', outputFile: 'result.html' }],
+    // ['json', { outputFile: 'playwright-result-others/result.json' }],
+    ['./test/excel-reporter.ts', {} as Partial<IExcelConfig>],
+  ],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

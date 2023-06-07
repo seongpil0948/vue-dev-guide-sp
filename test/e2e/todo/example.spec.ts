@@ -1,23 +1,26 @@
-import { type Page, expect, test } from '@playwright/test'
+import { type Page } from '@playwright/test'
+import { AnnotationType, expect, test } from 'test/tester'
 // API: https://playwright.dev/docs/writing-tests#navigation
 
 const MAIN_ROUTE = 'http://localhost:3333/guide/samp/el-todo'
-test.describe('할일 생성/읽기/수정/삭제 테스트', () => {
-  test.beforeEach(async ({ page }) => {
-    test.info().annotations.push(...[{ type: '메인 카테고리', description: 'UI 프레임워크' }, { type: '서브 카테고리', description: 'TODO 관리' }])
+test.describe('할일 생성,읽기,수정,삭제 테스트', () => {
+  test.beforeEach(async ({ page, pushAnnotation, screenshotBefore }) => {
+    pushAnnotation(AnnotationType.MAIN_CATEGORY, 'UI 프레임워크')
+    pushAnnotation(AnnotationType.SUB_CATEGORY1, 'TODO 관리')
     await page.goto(MAIN_ROUTE) // Go to the starting url before each test.
+    await page.waitForSelector('[data-test-id="todo-table"]')
+    await screenshotBefore()
   })
   test('할 일 생성 케이스', async ({ page }) => {
     test.info().annotations.push(...[{ type: 'Test Action', description: 'UI Framework를 실행하고, 페이지 접속 \n TODO 페이지에서 할 일 을 입력하고 저장 되는지 확인' }, { type: '사용 데이터', description: 'ID: 1. 소금빵을 산다. \n  2. 밥을 먹는다.' }])
-    await page.waitForSelector('[data-test-id="todo-table"]')
-    await page.screenshot({ path: 'screenshots/todo/before-create.png', fullPage: true })
+
     await createTwoTodo(page)
     expect((await page.$$('.data-test-row')).length).toEqual(2)
-    await page.screenshot({ path: 'screenshots/todo/after-create.png', fullPage: true })
+    // await page.screenshot({ path: 'screenshots/todo/after-create.png', fullPage: true })
   })
   test('할 일 테이블 체크박스 수정 케이스', async ({ page }) => {
     test.info().annotations.push(...[{ type: 'Test Action', description: '할 일의 체크박스 전환(체크/해제)을 테스트한다.' }])
-    test.fail()
+    // test.fail()
     await createTwoTodo(page)
     await page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('span').nth(1).click()
     await expect(page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('label.el-checkbox')).toHaveClass(/is-checked/)
