@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import fs from 'fs'
 import { type TestInfo, test as base } from '@playwright/test'
 import testConfig from './testConfig'
 
@@ -12,7 +13,7 @@ export enum AnnotationType {
 // Declare a array that defines the order of the elements to be sorted.
 // const annotationOrder = ['MAIN_CATEGORY', 'SUB_CATEGORY1', 'SUB_CATEGORY3']
 
-export const getScreenshotDir = (testInfo: TestInfo) => {
+export const getRecordDir = (testInfo: TestInfo) => {
   // const customList = testInfo.annotations.filter(a => isCustomAnnotation(a.type))
   // console.log('testInfo.annotations: ', testInfo.annotations)
   // console.log('customList: ', customList)
@@ -29,16 +30,40 @@ export const getScreenshotDir = (testInfo: TestInfo) => {
   //   },
   // )
   // return [testInfo.config.globalSetup, ...customList.map(x => x.description)].join('/')
-  // return `${testConfig.screenshotPath}/${testInfo.outputDir.split('-').slice(1).join('/')}`
+  // return `${testConfig.recordPath}/${testInfo.outputDir.split('-').slice(1).join('/')}`
   // 0 is file directory path(relative)
-  const path = `${testConfig.screenshotPath}/${testInfo.titlePath.slice(1).join('/')}`
-  console.log('path: ', path)
+  const path = `${testConfig.recordPath}/${testInfo.titlePath.slice(1).join('/')}`
+  // console.log('path: ', path)
   return path
 }
 
-base.afterEach(async ({ page }, testInfo) => {
-  await page.screenshot({ path: `${getScreenshotDir(testInfo)}/after.jpeg`, type: 'jpeg', scale: 'css' })
+// from, to
+const videoPaths: [string, string][] = []
+
+base.afterAll(() => {
+  videoPaths.forEach((pathInfo) => {
+    fs.rename(pathInfo[0], pathInfo[1], (err) => {
+      if (err)
+        throw err
+      console.log('Successfully renamed - AKA moved!')
+    })
+  })
 })
+
+base.afterEach(async ({ page }, testInfo) => {
+  if (!testConfig.saveRecord)
+    return
+  const env = testInfo.project.name
+  await page.screenshot({ path: `${getRecordDir(testInfo)}/after-${env}.jpeg`, type: 'jpeg', scale: 'css' })
+  const video = page.video()
+  const videoPath = `${getRecordDir(testInfo)}/${env}.webm`
+  if (video)
+    videoPaths.push([await video.path(), videoPath])
+
+  // test not closed when use saveAs
+  // await video.saveAs(videoPath)
+})
+base.use({ locale: 'ko-KR', timezoneId: 'Asia/Seoul' })
 
 interface IMyFixtures {
   pushAnnotation(type: AnnotationType, description: string): void
@@ -54,7 +79,9 @@ export const test = base.extend<IMyFixtures>({
   },
   screenshotBefore: async ({ page }, use, testInfo) => {
     await use(async () => {
-      await page.screenshot({ path: `${getScreenshotDir(testInfo)}/before.jpeg`, type: 'jpeg', scale: 'css' })
+      if (!testConfig.saveRecord)
+        return
+      await page.screenshot({ path: `${getRecordDir(testInfo)}/before-${testInfo.project.name}.jpeg`, type: 'jpeg', scale: 'css' })
     })
   },
 })

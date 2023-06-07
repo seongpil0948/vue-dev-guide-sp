@@ -1,3 +1,4 @@
 export default {
-  screenshotPath: 'screenshots',
+  recordPath: 'records',
+  saveRecord: true,
 }

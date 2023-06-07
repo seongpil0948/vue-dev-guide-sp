@@ -13,7 +13,7 @@ import type { IExcelConfig } from 'test/excel-reporter'
 const TEST_E2E_PATH = './test/e2e'
 export default defineConfig({
   testDir: TEST_E2E_PATH,
-  timeout: 5000,
+  timeout: 1000 * 60,
   // expect: {
   /**
      * Maximum time expect() should wait for the condition to be met.
@@ -48,7 +48,11 @@ export default defineConfig({
     /* Only on CI systems run the tests headless */
     headless: !!process.env.CI,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    // trace: 'on-first-retry',
+    video: {
+      mode: 'on',
+      size: { width: 480, height: 360 },
+    },
   },
 
   /* Configure projects for major browsers */
