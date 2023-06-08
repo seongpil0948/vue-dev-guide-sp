@@ -5,8 +5,11 @@
 ## Agenda
 ### 논의 해야 할 사항
 ### 제한 사항
-- SheetJS 유료기능
-  - 스타일링, 이미지 삽입등은 Input Template 기능으로 대체
+- SheetJS 
+  - 유료기능
+    - 스타일링, 이미지 삽입등은 Input Template 기능으로 대체
+  -  에러 
+     -  Sheet name cannot be 'History' 히스토리명을 시트네임으로 사용 불가하다.
 - 테스트 동영상 저장기능
   - 동영상 촬영시 성공 해야 할 테스트에서 timeout fail 발생
   - timeout 제한을 늘렸음에도 불규칙적인 에러 발생. 

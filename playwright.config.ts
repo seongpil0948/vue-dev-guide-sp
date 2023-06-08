@@ -13,7 +13,7 @@ import type { IExcelConfig } from 'test/excel-reporter'
 const TEST_E2E_PATH = './test/e2e'
 export default defineConfig({
   testDir: TEST_E2E_PATH,
-  timeout: 1000 * 10,
+  // timeout: 1000 * 10,
   // expect: {
   /**
      * Maximum time expect() should wait for the condition to be met.
@@ -36,7 +36,7 @@ export default defineConfig({
   reporter: [
     ['html', { outputFolder: 'playwright-result-html', outputFile: 'result.html' }],
     // ['json', { outputFile: 'playwright-result-others/result.json' }],
-    ['./test/excel-reporter.ts', {} as Partial<IExcelConfig>],
+    ['./test/excel-reporter.ts', { excelInputPath: 'unit-test-case.xlsx', excelStartRow: 0 } as Partial<IExcelConfig>],
   ],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
