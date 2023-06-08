@@ -16,6 +16,10 @@
   - 다른API 사용, 테스트간 sleep, 비디오를 저장하는 Hook 변경등 테스트가 좀 필요 할것으로 보입니다.
 
 ### 산출물
+- Test 환경
+  - chromium
+  - firefox
+  - webkit
 - 12개 케이스 기준 총 약 4MB
   - 엑셀
     - 약 18.0KB
