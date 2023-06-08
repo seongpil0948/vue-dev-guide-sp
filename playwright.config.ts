@@ -1,5 +1,5 @@
 import { defineConfig, devices, expect } from '@playwright/test'
-import type { IExcelConfig } from 'test/excel-reporter'
+import type { IExcelConfig } from 'playwright-excel-reporter'
 
 /**
  * Read environment variables from file.
@@ -34,9 +34,17 @@ export default defineConfig({
   // Reporter to use. See https://playwright.dev/docs/test-reporters
   // reporter: 'html',
   reporter: [
-    ['html', { outputFolder: 'playwright-result-html', outputFile: 'result.html' }],
-    // ['json', { outputFile: 'playwright-result-others/result.json' }],
-    ['./test/excel-reporter.ts', { excelInputPath: 'unit-test-case.xlsx', excelStartRow: 0 } as Partial<IExcelConfig>],
+    ['html', {
+      outputFolder: 'playwright-result-html',
+      outputFile: 'result.html',
+    }],
+    ['playwright-excel-reporter', {
+      excelInputPath: 'test/asset/unit-test-case.xlsx',
+      excelStartRow: 5,
+      caseSheetName: '블라인드',
+      excelOutputDir: 'excel-reporter-result',
+      excelOutputFileName: 'result.xlsx',
+    } as Partial<IExcelConfig>],
   ],
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
