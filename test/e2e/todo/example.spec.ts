@@ -22,7 +22,7 @@ test.describe('할일 생성,읽기,수정,삭제 테스트', () => {
   test('할 일 테이블 체크박스 수정 케이스', async ({ page }) => {
     test.slow()
     test.info().annotations.push(...[{ type: 'Test Action', description: '할 일의 체크박스 전환(체크/해제)을 테스트한다.' }])
-    // test.fail()
+    test.fail()
     await createTwoTodo(page)
     await page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('span').nth(1).click()
     await expect(page.getByRole('row', { name: '소금빵을 산다 미완료' }).locator('label.el-checkbox')).toHaveClass(/is-checked/)

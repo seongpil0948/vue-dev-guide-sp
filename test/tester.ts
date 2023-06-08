@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import fs from 'fs'
+// import fs from 'fs'
 import { type TestInfo, test as base } from '@playwright/test'
 import testConfig from './testConfig'
 
@@ -38,27 +37,28 @@ export const getRecordDir = (testInfo: TestInfo) => {
 }
 
 // from, to
-const videoPaths: [string, string][] = []
+// const videoPaths: [string, string][] = []
 
-base.afterAll(() => {
-  videoPaths.forEach((pathInfo) => {
-    fs.rename(pathInfo[0], pathInfo[1], (err) => {
-      if (err)
-        throw err
-      console.log('Successfully renamed - AKA moved!')
-    })
-  })
-})
+// base.afterAll(() => {
+//   videoPaths.forEach((pathInfo) => {
+//     fs.rename(pathInfo[0], pathInfo[1], (err) => {
+//       if (err)
+//         throw err
+//       console.log('Successfully renamed - AKA moved!')
+//     })
+//   })
+// })
 
 base.afterEach(async ({ page }, testInfo) => {
   if (!testConfig.saveRecord)
     return
   const env = testInfo.project.name
   await page.screenshot({ path: `${getRecordDir(testInfo)}/after-${env}.jpeg`, type: 'jpeg', scale: 'css' })
-  const video = page.video()
-  const videoPath = `${getRecordDir(testInfo)}/${env}.webm`
-  if (video)
-    videoPaths.push([await video.path(), videoPath])
+  // video saveAs is not work properly(not close context)
+  // const video = page.video()
+  // const videoPath = `${getRecordDir(testInfo)}/${env}.webm`
+  // if (video)
+  //   videoPaths.push([await video.path(), videoPath])
 
   // test not closed when use saveAs
   // await video.saveAs(videoPath)
