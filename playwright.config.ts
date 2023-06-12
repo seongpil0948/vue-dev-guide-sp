@@ -61,6 +61,8 @@ export default defineConfig({
     //   mode: 'on',
     //   size: { width: 480, height: 360 },
     // },
+    locale: 'ko-KR',
+    timezoneId: 'Asia/Seoul',
   },
 
   /* Configure projects for major browsers */

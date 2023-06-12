@@ -63,11 +63,12 @@ base.afterEach(async ({ page }, testInfo) => {
   // test not closed when use saveAs
   // await video.saveAs(videoPath)
 })
-base.use({ locale: 'ko-KR', timezoneId: 'Asia/Seoul' })
+// base.use({ locale: 'ko-KR', timezoneId: 'Asia/Seoul' })
 
 interface IMyFixtures {
   pushAnnotation(type: AnnotationType, description: string): void
   screenshotBefore(): Promise<void>
+  testConfig: typeof testConfig
 }
 
 export const test = base.extend<IMyFixtures>({
@@ -84,6 +85,7 @@ export const test = base.extend<IMyFixtures>({
       await page.screenshot({ path: `${getRecordDir(testInfo)}/before-${testInfo.project.name}.jpeg`, type: 'jpeg', scale: 'css' })
     })
   },
+  testConfig,
 })
 
 export { expect } from '@playwright/test'
