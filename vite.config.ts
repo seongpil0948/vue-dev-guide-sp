@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
@@ -13,8 +13,10 @@ import Inspect from 'vite-plugin-inspect'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import Shiki from 'markdown-it-shiki'
+
 // Elements Plus auto import 사용을 위해 추가
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import VueJsx from '@vitejs/plugin-vue-jsx'
 
 export default defineConfig({
   resolve: {
@@ -66,6 +68,7 @@ export default defineConfig({
       dirs: [
         'src/composables',
         'src/store',
+        'src/components',
       ],
       vueTemplate: true,
       resolvers: [ElementPlusResolver()],
@@ -74,12 +77,13 @@ export default defineConfig({
     // https://github.com/antfu/unplugin-vue-components
     Components({
       // allow auto load markdown components under `./src/components/`
-      extensions: ['vue', 'md'],
+      extensions: ['vue', 'md', 'tsx'],
       // allow auto import and register components used in markdown
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.tsx$/],
       dts: 'src/components.d.ts',
       resolvers: [ElementPlusResolver()],
       directoryAsNamespace: true,
+      dirs: ["src/components", "src/pages"],
     }),
 
     // https://github.com/antfu/unocss
@@ -153,6 +157,7 @@ export default defineConfig({
     // https://github.com/antfu/vite-plugin-inspect
     // Visit http://localhost:3333/__inspect/ to see the inspector
     Inspect(),
+    VueJsx(),
   ],
 
   // SCSS 전역 사용

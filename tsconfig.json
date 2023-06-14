@@ -25,5 +25,12 @@
       "~/*": ["src/*"]
     }
   },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "test/**/*.ts",
+    "test/**/*.tsx",
+  ],    
   "exclude": ["dist", "node_modules", "cypress"]
 }

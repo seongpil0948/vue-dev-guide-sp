@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    '[...all]': typeof import('./pages/[...all].vue')['default']
+    About: typeof import('./pages/about.md')['default']
     Counter: typeof import('./components/Counter.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElForm: typeof import('element-plus/es')['ElForm']
@@ -15,6 +17,11 @@ declare module '@vue/runtime-core' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     Footer: typeof import('./components/Footer.vue')['default']
+    Form: typeof import('./components/Form.vue')['default']
+    'Hi-[name]': typeof import('./pages/hi/[name].vue')['default']
+    List: typeof import('./components/List.tsx')['default']
+    MsgForm: typeof import('./components/MsgForm.vue')['default']
+    MsgList: typeof import('./components/MsgList.tsx')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -1,18 +1,85 @@
 <script setup lang="ts">
+const MsgForm = defineAsyncComponent(() => import("~/components/MsgForm.vue"));
+import {List} from "~/components/MsgList"
 const user = useUserStore()
 const name = $ref(user.savedName)
 
 const router = useRouter()
-const go = () => {
+function go() {
   if (name)
     router.push(`/hi/${encodeURIComponent(name)}`)
 }
 
 const { t } = useI18n()
+
+const openPrompt = () => {
+  ElMessageBox.prompt('Please input your e-mail', 'Tip', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    inputPattern:
+      /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+    inputErrorMessage: 'Invalid Email',
+  })
+    .then(({ value }) => {
+      ElMessage({
+        type: 'success',
+        message: `Your email is:${value}`,
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Input canceled',
+      })
+    })
+}
+function openElElement() {
+  const checked = ref<boolean | string | number>(false)
+  ElMessageBox({
+    title: 'Message',
+    // Should pass a function if VNode contains dynamic props
+    message: () =>
+      h(ElSwitch, {
+        'modelValue': checked.value,
+        'onUpdate:modelValue': (val: boolean | string | number) => {
+          checked.value = val
+        },
+      }),
+  })
+}
+function openVueFile() {
+  ElMessageBox({
+    title: 'Message',
+    message: () => h(MsgForm),
+  })
+}
+function openTsx() {
+  ElMessageBox({
+    title: 'Message',
+    message: () => h(List, {
+      data: [
+        { id: "1", name: "sp" },
+        { id: "2", name: "hi" },
+      ]
+      }),
+  })
+}
 </script>
 
 <template>
   <div>
+    <el-button plain @click="openPrompt">
+      openPrompt with VNode
+    </el-button>
+    <el-button plain @click="openElElement">
+      open with ElElement
+    </el-button>
+    <el-button plain @click="openVueFile">
+      open with Vue File
+    </el-button>
+    <el-button plain @click="openTsx">
+      open with Tsx Form
+    </el-button>
     <div text-4xl>
       <div i-carbon-campsite inline-block />
     </div>
