@@ -144,6 +144,7 @@ function messageBoxFactory(boxType: typeof MESSAGE_BOX_VARIANTS[number]) {
 - **TSX** 문법을 사용하여 해당 컴포넌트 구현 가능
 - **TSX** 문법을 사용하여 해당 컴포넌트 사용 가능
 - `'alert', 'confirm', 'prompt'` 와같은 다양한 variant를 추가로 구성가능
+- 인스턴스수를 사용되는 만큼만 생성
   
 ## 코드량을 줄여 사용 될 예제
 [예제 파일 참고](src/pages/index.vue)
