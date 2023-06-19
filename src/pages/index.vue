@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const MsgForm = defineAsyncComponent(() => import("~/components/MsgForm.vue"));
-import {List} from "~/components/MsgList"
+import { List } from '~/components/MsgList'
+const MsgForm = defineAsyncComponent(() => import('~/components/MsgForm.vue'))
 const user = useUserStore()
 const name = $ref(user.savedName)
 
@@ -50,7 +50,9 @@ function openElElement() {
 function openVueFile() {
   ElMessageBox({
     title: 'Message',
-    message: () => h(MsgForm),
+    message: () => h(MsgForm, {
+
+    }),
   })
 }
 function openTsx() {
@@ -58,10 +60,10 @@ function openTsx() {
     title: 'Message',
     message: () => h(List, {
       data: [
-        { id: "1", name: "sp" },
-        { id: "2", name: "hi" },
-      ]
-      }),
+        { id: '1', name: 'sp' },
+        { id: '2', name: 'hi' },
+      ],
+    }),
   })
 }
 </script>
