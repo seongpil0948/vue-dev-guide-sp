@@ -1,5 +1,7 @@
+<!-- eslint-disable no-console -->
 <script setup lang="ts">
 import { List } from '~/components/MsgList'
+
 const MsgForm = defineAsyncComponent(() => import('~/components/MsgForm.vue'))
 const user = useUserStore()
 const name = $ref(user.savedName)
@@ -9,70 +11,44 @@ function go() {
   if (name)
     router.push(`/hi/${encodeURIComponent(name)}`)
 }
-
 const { t } = useI18n()
 
-const openPrompt = () => {
-  ElMessageBox.prompt('Please input your e-mail', 'Tip', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    inputPattern:
-      /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-    inputErrorMessage: 'Invalid Email',
-  })
-    .then(({ value }) => {
-      ElMessage({
-        type: 'success',
-        message: `Your email is:${value}`,
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: 'Input canceled',
-      })
-    })
-}
-function openElElement() {
-  const checked = ref<boolean | string | number>(false)
-  ElMessageBox({
-    title: 'Message',
-    // Should pass a function if VNode contains dynamic props
-    message: () =>
-      h(ElSwitch, {
-        'modelValue': checked.value,
-        'onUpdate:modelValue': (val: boolean | string | number) => {
-          checked.value = val
-        },
-      }),
-  })
-}
-function openVueFile() {
-  ElMessageBox({
-    title: 'Message',
-    message: () => h(MsgForm, {
+const { showFromNode, showFromFile } = useReturnMessage()
 
-    }),
+async function openElElement() {
+  const checked = ref<boolean | string | number>(false)
+  const vNode = h(ElSwitch, {
+    'modelValue': checked.value,
+    'onUpdate:modelValue': (val: boolean | string | number) => {
+      checked.value = val
+    },
+    submitData() {
+      return checked.value
+    },
   })
+  const result = await showFromNode(vNode)
+  console.log('result: ', result)
 }
-function openTsx() {
-  ElMessageBox({
-    title: 'Message',
-    message: () => h(List, {
-      data: [
-        { id: '1', name: 'sp' },
-        { id: '2', name: 'hi' },
-      ],
-    }),
-  })
+
+async function openVueFile() {
+  const result = await showFromFile(MsgForm)
+  console.log('result: ', result)
+}
+
+async function openTsx() {
+  const vNode = h(List, {
+    data: [
+      { id: '1', name: 'sp' },
+      { id: '2', name: 'hi' },
+    ],
+  }, {})
+  const result = await showFromNode(vNode)
+  console.log('result: ', result)
 }
 </script>
 
 <template>
   <div>
-    <el-button plain @click="openPrompt">
-      openPrompt with VNode
-    </el-button>
     <el-button plain @click="openElElement">
       open with ElElement
     </el-button>
