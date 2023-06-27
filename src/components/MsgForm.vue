@@ -12,11 +12,14 @@ interface DomainItem {
   value: string
 }
 
+const props = defineProps<{ initialData: Partial<IFormData> }>()
 const emit = defineEmits<{
-  (e: 'submitData', value: IFormData): void
+  (e: 'submit', value: IFormData): void
+  (e: 'cancel'): void
 }>()
+
 const formRef = ref<FormInstance>()
-const dynamicValidateForm = reactive<IFormData>({
+const defaultForm: IFormData = {
   domains: [
     {
       key: 1,
@@ -24,15 +27,21 @@ const dynamicValidateForm = reactive<IFormData>({
     },
   ],
   email: '',
+}
+
+const formData = reactive<IFormData>(defaultForm)
+watchEffect(() => {
+  formData.email = props.initialData.email ?? formData.email
 })
+
 const removeDomain = (item: DomainItem) => {
-  const index = dynamicValidateForm.domains.indexOf(item)
+  const index = formData.domains.indexOf(item)
   if (index !== -1)
-    dynamicValidateForm.domains.splice(index, 1)
+    formData.domains.splice(index, 1)
 }
 
 const addDomain = () => {
-  dynamicValidateForm.domains.push({
+  formData.domains.push({
     key: Date.now(),
     value: '',
   })
@@ -43,8 +52,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     return
   formEl.validate((valid) => {
     if (valid) {
-      console.log('submit!')
-      emit('submitData', dynamicValidateForm)
+      emit('submit', formData)
     }
     else {
       console.log('error submit!')
@@ -53,17 +61,11 @@ const submitForm = (formEl: FormInstance | undefined) => {
   })
 }
 
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl)
-    return
-  formEl.resetFields()
-}
-
-defineExpose({ dynamicValidateForm })
+defineExpose({ formData })
 </script>
 
 <template>
-  <el-form ref="formRef" :model="dynamicValidateForm" label-width="120px" class="demo-dynamic">
+  <el-form ref="formRef" :model="formData" label-width="120px" class="demo-dynamic">
     <el-form-item
       prop="email" label="Email" :rules="[
         {
@@ -78,10 +80,10 @@ defineExpose({ dynamicValidateForm })
         },
       ]"
     >
-      <el-input v-model="dynamicValidateForm.email" />
+      <el-input v-model="formData.email" />
     </el-form-item>
     <el-form-item
-      v-for="(domain, index) in dynamicValidateForm.domains" :key="domain.key" :label="`Domain${index}`"
+      v-for="(domain, index) in formData.domains" :key="domain.key" :label="`Domain${index}`"
       :prop="`domains.${index}.value`" :rules="{
         required: true,
         message: 'domain can not be null',
@@ -94,14 +96,14 @@ defineExpose({ dynamicValidateForm })
       </el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm(formRef)">
-        Submit
-      </el-button>
       <el-button @click="addDomain">
-        New domain
+        도메인 추가
       </el-button>
-      <el-button @click="resetForm(formRef)">
-        Reset
+      <el-button type="primary" @click="submitForm(formRef)">
+        제출
+      </el-button>
+      <el-button @click="() => $emit('cancel')">
+        닫기
       </el-button>
     </el-form-item>
   </el-form>

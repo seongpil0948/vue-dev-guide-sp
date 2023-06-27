@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
-export interface IList {
+export interface IListItem {
   id: string
   name: string
 }
@@ -11,13 +11,17 @@ export const List = defineComponent({
   props: {
     data: {
       required: true,
-      type: Array as PropType<IList[]>,
+      type: Array as PropType<IListItem[]>,
       validation: (d: any) => d.length > 0,
     },
   },
   emits: {
-    submitData(data: IList) {
+    submit(data: IListItem) {
       return data
+    },
+    close() {
+      console.log('cancel in msg list')
+      return true
     },
   },
   setup(props, { emit }) {
@@ -30,11 +34,12 @@ export const List = defineComponent({
               key={v.id}
               onClick={() => {
                 console.log(v)
-                emit('submitData', v)
+                emit('submit', v)
               }}
             >{v.name}</li>
           })}
         </ul>
+        <button onClick={() => emit('close')}>닫기</button>
       </div>
     )
   },

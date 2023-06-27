@@ -1,63 +1,56 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
+import type { IListItem } from '~/components/MsgList'
 import { List } from '~/components/MsgList'
 
 const MsgForm = defineAsyncComponent(() => import('~/components/MsgForm.vue'))
 const user = useUserStore()
 const name = $ref(user.savedName)
-
 const router = useRouter()
 function go() {
   if (name)
     router.push(`/hi/${encodeURIComponent(name)}`)
 }
 const { t } = useI18n()
-
 const { showFromNode, showFromFile } = useReturnMessage()
 
-async function openElElement() {
-  const checked = ref<boolean | string | number>(false)
-  const vNode = h(ElSwitch, {
-    'modelValue': checked.value,
-    'onUpdate:modelValue': (val: boolean | string | number) => {
-      checked.value = val
-    },
-    submitData() {
-      return checked.value
+async function openVueFile() {
+  const result = await showFromFile({
+    component: MsgForm,
+    props: {
+      initialData: {
+        email: 'qwepoi3218@naver.com',
+      },
+      onSubmit: () => {
+        console.info('emitted submit')
+      },
     },
   })
-  const result = await showFromNode(vNode)
   console.log('result: ', result)
 }
-
-async function openVueFile() {
-  const result = await showFromFile(MsgForm)
-  console.log('result: ', result)
-}
-
+const getListNode = () => h(List, {
+  data: [
+    { id: '1', name: 'sp' },
+    { id: '2', name: 'hi' },
+  ],
+}, {})
 async function openTsx() {
-  const vNode = h(List, {
-    data: [
-      { id: '1', name: 'sp' },
-      { id: '2', name: 'hi' },
-    ],
-  }, {})
-  const result = await showFromNode(vNode)
-  console.log('result: ', result)
+  const vNode = getListNode()
+  showFromNode<IListItem>(vNode)
+    .then((result) => { console.log(result) })
+    .catch(err => console.error(err))
 }
 </script>
 
 <template>
   <div>
-    <el-button plain @click="openElElement">
-      open with ElElement
-    </el-button>
     <el-button plain @click="openVueFile">
       open with Vue File
     </el-button>
     <el-button plain @click="openTsx">
       open with Tsx Form
     </el-button>
+
     <div text-4xl>
       <div i-carbon-campsite inline-block />
     </div>

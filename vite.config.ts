@@ -66,7 +66,8 @@ export default defineConfig({
       ],
       dts: 'src/auto-imports.d.ts',
       dirs: [
-        'src/composables',
+        // FIXME
+        'src/composables/**',
         'src/store',
         'src/components',
       ],
@@ -83,7 +84,7 @@ export default defineConfig({
       dts: 'src/components.d.ts',
       resolvers: [ElementPlusResolver()],
       directoryAsNamespace: true,
-      dirs: ["src/components", "src/pages"],
+      dirs: ['src/components', 'src/pages'],
     }),
 
     // https://github.com/antfu/unocss
